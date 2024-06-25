@@ -1,2 +1,6 @@
 # ucl-yasmim-maria
 Meninas
+-Descrição: O sistema é um programa em C# para gerenciar pedidos em uma loja fictícia chamada "Docinhos de Amor". Ele permite criar e listar pedidos, adicionar itens (doces, bebidas, salgados) e salvar os pedidos para que possam ser vistos posteriormente.
+-Funcionabilidade: No menu inicial, o usuário pode escolher entre criar um novo pedido ou listar todos os pedidos existentes. Ao criar um pedido, o sistema solicita o nome do cliente e permite adicionar itens ao pedido através de submenus, onde o usuário pode selecionar doces, bebidas e salgados, especificando a quantidade desejada para cada item. Após adicionar os itens, o usuário finaliza o pedido escolhendo o método de pagamento (Cartão de Crédito, Cartão de Débito, Dinheiro). O sistema então calcula o total do pedido e exibe os itens com seus respectivos valores.
+Na opção de listar pedidos, o sistema exibe todos os pedidos realizados anteriormente, mostrando detalhes do cliente, itens (doces, bebidas, salgados), total e método de pagamento.
+-Requisitos: O sistema é feito em C# com programação orientada a objetos. Usa arquivos de texto para guardar os dados e listas ou vetores para organizar essas informações. Tem métodos get e set, integração de classes, um menu para o usuário interagir e um método para mostrar relatórios na tela.
