@@ -1,0 +1,175 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string opcaoinicial = "";
+        Cliente MeuCliente;
+        int quantidadeBebidas;
+        int quantidadeDoces;
+        int quantidadeSalgados;
+
+        List<Pedido> pedidos = Pedido.LerPedidos();
+        Loja loja = new Loja();
+
+        Console.WriteLine("°°°°°°°°°°°°°°°°   Bem-vindo à  °°°°°°°°°°°°°°°°°°°°");
+        Console.WriteLine("°°°°°°°°°°°°°°°° Docinhos de Amor °°°°°°°°°°°°°°°°°°°");
+
+        Console.WriteLine("Escolha uma opção:");
+        Console.WriteLine("1. Fazer um novo pedido");
+        Console.WriteLine("2. Lista de pedidos");
+
+        string escolhaInicial = Console.ReadLine();
+
+        if (escolhaInicial == "2")
+        {
+            foreach (var pedidoss in pedidos)
+            {
+                Console.WriteLine($"Cliente: {pedidoss.GetCliente().getNome()}");
+
+                Console.WriteLine("Doces:");
+                foreach (var doce in pedidoss.GetDoces())
+                {
+                    Console.WriteLine($"{doce.getNomeDoce()} - R$ {doce.getPrecoDoce()} x 1");
+                }
+
+                Console.WriteLine("Bebidas:");
+                foreach (var bebida in pedidoss.GetBebidas())
+                {
+                    Console.WriteLine($"{bebida.getNomeBebida()} - R$ {bebida.getPrecoBebida()} x 1");
+                }
+
+                Console.WriteLine("Salgados:");
+                foreach (var salgado in pedidoss.GetSalgados())
+                {
+                    Console.WriteLine($"{salgado.getNomeSalgado()} - R$ {salgado.getPrecoSalgado()} x 1");
+                }
+
+                Console.WriteLine($"Total: R$ {pedidoss.Total}");
+                Console.WriteLine($"Método de Pagamento: {pedidoss.GetMetodoPagamento()}");
+                Console.WriteLine("===================================");
+            }
+            return; // Termina a execução do programa após exibir os pedidos existentes
+        }
+
+        Console.Write("Digite o nome do cliente: ");
+        string nomeCliente = Console.ReadLine();
+        MeuCliente = new Cliente(nomeCliente);
+
+        Pedido pedido = loja.CriarPedido(MeuCliente);
+
+        while (opcaoinicial != "0")
+        {
+            Console.WriteLine("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
+            Console.WriteLine("Escolha uma opção:");
+            Console.WriteLine("0. Fechar cardápio do amor");
+            Console.WriteLine("1. Abrir cardapinho");
+            Console.WriteLine("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
+            string opcao = Console.ReadLine();
+            string opcaoVoltar = "s";
+
+            switch (opcao)
+            {
+                case "0":
+                    Console.WriteLine("Finalizando o pedido...");
+                    Console.WriteLine("Escolha o método de pagamento:");
+                    Console.WriteLine("1. Cartão de Crédito");
+                    Console.WriteLine("2. Cartão de Débito");
+                    Console.WriteLine("3. Dinheiro");
+                    int metodoPagamento = int.Parse(Console.ReadLine());
+
+                    switch (metodoPagamento)
+                    {
+                        case 1:
+                            pedido.SetMetodoPagamento("Cartão de Crédito");
+                            break;
+                        case 2:
+                            pedido.SetMetodoPagamento("Cartão de Débito");
+                            break;
+                        case 3:
+                            pedido.SetMetodoPagamento("Dinheiro");
+                            break;
+                        default:
+                            Console.WriteLine("Método de pagamento inválido. Usando Dinheiro como padrão.");
+                            pedido.SetMetodoPagamento("Dinheiro");
+                            break;
+                    }
+
+                    pedido.CalcularTotal();
+
+                    Console.WriteLine("Itens do Pedido:");
+                    foreach (var doce in pedido.GetDoces())
+                    {
+                        Console.WriteLine($"{doce.getNomeDoce()} - R$ {doce.getPrecoDoce()} x {doce.getQuantidadeDoce()}");
+                    }
+                    foreach (var bebida in pedido.GetBebidas())
+                    {
+                        Console.WriteLine($"{bebida.getNomeBebida()} - R$ {bebida.getPrecoBebida()} x {bebida.getQuantidadeBebida()}");
+                    }
+                    foreach (var salgado in pedido.GetSalgados())
+                    {
+                        Console.WriteLine($"{salgado.getNomeSalgado()} - R$ {salgado.getPrecoSalgado()} x {salgado.getQuantidadeSalgado()}");
+                    }
+                    Console.WriteLine($"Total: R$ {pedido.Total}");
+                    Console.WriteLine($"Método de Pagamento: {pedido.GetMetodoPagamento()}");
+                    Console.WriteLine("!Obrigada por comprar em nossa loja!");
+                    Console.WriteLine("❤️ Tenha um bom dia❤️");
+
+                    Pedido.SalvarPedido(pedido);
+
+                    opcaoinicial = "0"; // Saindo do loop principal
+                    break;
+
+                case "1":
+                    while (opcaoVoltar == "s")
+                    {
+                        Console.WriteLine("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
+                        Console.WriteLine("1. Adicionar Doce");
+                        Console.WriteLine("2. Adicionar Bebida");
+                        Console.WriteLine("3. Adicionar Salgado");
+                        Console.WriteLine("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
+                        string opcao1 = Console.ReadLine();
+
+                        switch (opcao1)
+                        {
+                            case "1":
+                                loja.ExibirDoces();
+                                Console.WriteLine("Digite o número do doce que deseja adicionar ao pedido: ");
+                                int numeroDoce = int.Parse(Console.ReadLine()) - 1;
+                                Console.WriteLine("Digite a quantidade: ");
+                                quantidadeDoces = int.Parse(Console.ReadLine());
+                                loja.AdicionarDocePedido(pedido, numeroDoce, quantidadeDoces);
+                                break;
+
+                            case "2":
+                                loja.ExibirBebidas();
+                                Console.WriteLine("Digite o número da bebida que deseja adicionar ao pedido: ");
+                                int numeroBebida = int.Parse(Console.ReadLine()) - 1;
+                                Console.WriteLine("Digite a quantidade: ");
+                                quantidadeBebidas = int.Parse(Console.ReadLine());
+                                loja.AdicionarBebidaPedido(pedido, numeroBebida, quantidadeBebidas);
+                                break;
+
+                            case "3":
+                                loja.ExibirSalgados();
+                                Console.WriteLine("Digite o número do salgado que deseja adicionar ao pedido: ");
+                                int numeroSalgado = int.Parse(Console.ReadLine()) - 1;
+                                Console.WriteLine("Digite a quantidade: ");
+                                quantidadeSalgados = int.Parse(Console.ReadLine());
+                                loja.AdicionarSalgadoPedido(pedido, numeroSalgado, quantidadeSalgados);
+                                break;
+                        }
+                        Console.WriteLine("Deseja adicionar mais itens ao pedido? (s)im / (n)ão): ");
+                        opcaoVoltar = Console.ReadLine();
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("Opção inválida. Tente novamente.");
+                    break;
+            }
+        }
+    }
+}
